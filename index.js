@@ -9,7 +9,13 @@ const { errorResponse } = require('./src/utils/baseResponse.util');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+const corsOptions = {
+  origin: 'http://localhost:5173',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+};
+app.use(cors(corsOptions));
 
 app.use(express.json());
 
@@ -25,10 +31,7 @@ app.use((err, req, res, next) => {
     res.status(500).json(errorResponse('Something went wrong!', err.message));
 });
 
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+module.exports = app;
 
 db.connect()
   .then(() => console.log('Database connected successfully'))
